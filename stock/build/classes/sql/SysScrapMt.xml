@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="sys_scrap_mt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from mysql.sys_scrap_mt
+	</select>
+	
+	<insert id="insertScrapJoblist" parameterType="entity.SysScrapMt">
+		insert into mysql.sys_scrap_mt(scrap_id, scrap_prs, scrap_src, scrap_dt, s_url, s_stat, s_strdt, s_enddt, rrsidno, rrt)
+		select substr(MD5(RAND()),1,20), #{scrap_prs}, #{scrap_src}, date_format(now(),'%Y%m%d'), #{s_url}, 0, null, null, IFNULL(#{rrsidno},'SYSTEM'), now()
+		from dual
+	</insert>
+	
+	<select id="selectScrapJobList" resultType="entity.SysScrapMt" parameterType="entity.SysScrapMt">
+		select scrap_id, scrap_prs, scrap_src, s_url
+		from mysql.sys_scrap_mt
+		where s_stat != 1
+	<if test="scrap_id != null">
+		and scrap_id = #{scrap_id}
+	</if>
+		limit 500
+	</select>
+	
+	
+	<update id="updateScrapJobStatus" parameterType="entity.SysScrapMt">
+		update mysql.sys_scrap_mt
+		set s_stat = #{s_stat}
+		where scrap_id = #{scrap_id}
+	</update>	
+	
+</mapper>

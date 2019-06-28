@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="mkt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from world.city
+	</select>
+
+	<select id="selectPriceInfo" parameterType="entity.Item" resultType="entity.Item">
+		select brandname, itemname, disprice, stdprice
+		from mysql.item
+		<if test="seq != null">
+			WHERE seq between (500*(${seq}-1))+1 and ${seq}*500
+		</if>
+	</select>
+	
+	<select id="selectColorInfo" parameterType="entity.Item" resultType="entity.Item">
+		select brandname, itemname, imgurl, colorhexcode, colr as colorR, colg as colorG, colb as colorB
+		from mysql.item
+		<if test="seq != null">
+			WHERE seq between (500*(${seq}-1))+1 and ${seq}*500
+		</if>
+	</select>
+	
+	<select id="selectImgUrl" resultType="entity.Item">
+		select distinct imgurl, itemname
+		from mysql.item
+		where colr = -1
+		group by imgurl, itemname
+		limit 500
+	</select>
+	
+	<insert id="insertPriceInfo" parameterType="entity.Item">
+		insert into mysql.item(brandname, itemname, disprice, stdprice, image_url, colorhexcode, colr, colg, colb, rrt, rrsidno )
+		select #{brandName}, #{itemName}, #{disPrice}, #{stdPrice}, #{imgURL}, '' as colorhexcode, -1, -1, -1, sysdate(), 'SYSTEM'
+		from dual
+	</insert>
+	
+	<update id="updateColorHexCode" parameterType="entity.Item">
+		update mysql.item
+		set colorhexcode = #{colorHexCode}
+		, colr = #{colorR}
+		, colg = #{colorG}
+		, colb = #{colorB}
+		where imgurl = #{imgURL}
+	</update>	
+	
+	<insert id="insertJoblist" parameterType="entity.Joblist">
+		insert into mysql.joblist
+		select #{comp}, #{gbn}, #{s_url}, #{s_status}, #{startdt}, #{enddt}, #{rrsidno}, now()
+		from mysql.meta
+		where meta_url = #{meta_url}
+	</insert>
+	
+	<select id="selectHttpItem" resultType="entity.HttpItem" parameterType="entity.HttpItem">
+		select compcd, method, accept, a_encoding, a_lang, cache, host, referer, origin, proxy, upgrade, x_requested, cookie
+		from mysql.http_req_header
+		where compcd = #{compcd}
+	</select>
+	
+	<select id="selectJobList" resultType="entity.Joblist" parameterType="entity.Joblist">
+		select comp, s_url
+		from mysql.joblist
+		where s_status = 0
+	<if test="s_url != null">
+		and s_url = #{s_url}
+	</if>
+		limit 500
+	</select>
+	
+	<select id="selectNewsJobList" resultType="entity.Joblist">
+		select comp, s_url, substr(s_url,83,8) as startdt
+		from mysql.joblist
+		where s_status = 0
+		limit 500
+	</select>
+	
+	<update id="updateJobStatus" parameterType="entity.Joblist">
+		update mysql.joblist
+		set s_status = #{s_status}
+		where s_url = #{s_url}
+	</update>	
+	
+	<insert id="insertNewsInfo" parameterType="entity.News">
+		insert into mysql.news_data(news_code, dt, title, link, rrt, rrsidno)
+		select #{press}, #{pubDate}, #{title}, #{artiURL}, sysdate(), 'system' from dual
+	</insert>
+
+	<select id="selectNewsList" parameterType="entity.News" resultType="entity.News">
+	<![CDATA[
+		select a.seq, date_format(a.pubDate,'%Y-%m-%d') pubDate, a.title, a.content, a.press
+		from (
+		select seq, dt as pubdate, title, ifnull(link,' ') as content, news_code as press  
+		from mysql.news_data
+	]]>
+		where lower(title) like concat('%',#{title},'%')
+		<if test="titlesec != null">
+		and lower(title) like concat('%',#{titlesec},'%')
+		</if>
+		<if test="titlethi != null">
+		and lower(title) like concat('%',#{titlethi},'%')
+		</if>
+		<if test="content != null">
+	<![CDATA[
+		union
+		select seq, dt as pubdate, title, ifnull(link,' ') as content, news_code as press  
+		from mysql.news_data
+		where lower(body) like concat('%',#{content},'%')
+	]]>
+		</if>
+		) a
+		order by 2, 3
+		limit #{pagef},30
+	</select>	
+
+	<select id="selectStockList" resultType="entity.Stock">
+	<![CDATA[
+		select stock_code as compcd, stock_nm as compnm 
+		from mysql.stock_meta 
+		where useyn = 'Y'
+	]]>
+	</select>
+
+	<select id="selectGideLine" parameterType="entity.Stock" resultType="entity.Stock">
+		select date_format(#{sDate},'%Y-%m-%d') as sDate
+			, date_format(date_add(#{sDate}, interval 90 day),'%Y-%m-%d') as eDate 
+		from dual
+	</select>
+	
+	<select id="selectCompList" resultType="entity.Stock">
+		select co_cd as compcd, co_nm as compnm
+		from mysql.stk_com_mt
+		where use_yn = 'Y'
+		and en_dt >= sysdate()
+		order by 2
+	</select>
+	
+	<select id="selectPriceList" parameterType="entity.Stock" resultType="entity.Stock">
+		select es_dt as dt, es_envl as eval, es_stvl as sval, es_hivl as hval, es_lovl as lval
+		from mysql.stk_prc_mt
+		where es_dt between date_add(#{sDate}, interval -30 day) and #{eDate} and co_cd = #{compcd}
+		order by es_dt
+	</select>
+	
+	<insert id="insertSearchLog" parameterType="entity.Search">
+		insert into mysql.log_search(action, keyword, startdt, enddt, compcd, rrt, rrsidno)
+		values(#{action}, #{keyword}, #{startdt}, #{enddt}, #{compcd}, sysdate(), #{rrsidno})
+	</insert>
+	
+	<insert id="insertSearchResult" parameterType="entity.Search">
+		insert into mysql.log_search(action, keyword, startdt, enddt, compcd, rrt, rrsidno, updown)
+		values(#{action}, #{keyword}, #{startdt}, (select date_format(date_add(#{startdt}, interval 90 day),'%Y%m%d') from dual), #{compcd}, sysdate(), #{rrsidno}, #{updown})
+	</insert>
+	
+	
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="Stock">
+
+	<select id="selectPriceInfoExist" parameterType="entity.Stock" resultType="entity.Stock">
+		select count(*) as cnt
+		from mysql.stock_price
+		where stock_code=convert('${compcd}',char)
+		  and dt=STR_TO_DATE(${dt},'%Y%m%d')
+	</select>
+	
+	<insert id="insertPriceInfo" parameterType="entity.Stock">
+		insert mysql.stock_price(stock_code,dt,sval,hval,lval,eval,gap,trsamt,rrsidno,rrt)
+		select convert('${compcd}',char), STR_TO_DATE(${dt},'%Y%m%d')
+			,${sVal},${hVal},${lVal},${eVal},${gap},${trsAmt},'system',sysdate() from dual
+		
+	</insert>
+	
+	<update id="updatePriceInfo" parameterType="entity.Stock">
+		update mysql.stock_price
+		set sval=${sVal}
+		,hval=${hVal}
+		,lval=${lVal}
+		,eval=${eVal}
+		,gap=${gap}
+		,trsamt=${trsAmt}
+		,rrsidno='system'
+		,rrt=sysdate()
+		where stock_code=convert('${compcd}',char)
+		  and dt=STR_TO_DATE(${dt},'%Y%m%d')
+	</update>
+	
+	<insert id="insertNewsInfo" parameterType="entity.News">
+		insert into mysql.news_data(news_code, dt, title, link)
+		values(${press}, sysdate(), ${title}, ${artiURL})
+	</insert>
+	
+	
+</mapper>

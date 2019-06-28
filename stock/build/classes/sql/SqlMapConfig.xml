@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<!-- <property name="driver" value="oracle.jdbc.driver.OracleDriver"/> 
+					<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/> <property 
+					name="url" value="jdbc:mysql://localhost:3306/"/> <property name="username" 
+					value="system"/> <property name="password" value="qkek12"/> 
+				-->
+				
+				 <!--<property name="url" value="jdbc:mysql://163.44.168.192:3306/" />  -->
+				 <property name="url" value="jdbc:mysql://localhost:3306/" /><!--	-->
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="username" value="root" />
+				<property name="password" value="qwer12#4" />
+
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="sql/user.xml" />
+		<mapper resource="sql/mkt.xml" />
+		<mapper resource="sql/StkComMt.xml" />
+		<mapper resource="sql/StkPrcMt.xml" />
+		<mapper resource="sql/SysScrapMt.xml" />
+		<mapper resource="sql/SysReqMt.xml" />
+		<mapper resource="sql/SysCdMt.xml" />
+		<!-- <mapper resource="sql/Stock.xml"/> -->
+		<mapper resource="sql/Stock.xml" />
+		<!-- <mapper resource="sql/Lotto.xml"/> -->
+		<!-- <mapper resource="sql/Scrap.xml"/> -->
+	</mappers>
+</configuration>

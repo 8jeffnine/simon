@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="sys_req_mt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from mysql.sys_req_mt
+	</select>
+	
+	<insert id="insertReqHeaderInfo" parameterType="entity.SysReqMt">
+		insert into mysql.sys_req_mt
+			(req_nm,
+			req_mth,
+			req_acc,
+			req_acen,
+			req_aclg,
+			req_cach,
+			req_con,
+			req_dnt,
+			req_ck,
+			req_host,
+			req_ref,
+			req_uir,
+			req_agent,
+			rrsidno,
+			rrt)
+		select
+			#{req_nm},
+			#{req_mth},
+			#{req_acc},
+			#{req_acen},
+			#{req_aclg},
+			#{req_cach},
+			#{req_con},
+			#{req_dnt},
+			#{req_ck},
+			#{req_host},
+			#{req_ref},
+			#{req_uir},
+			#{req_agent},
+			IFNULL(#{rrsidno},'SYSTEM'),
+			now()
+		from dual
+	</insert>
+	
+	<select id="selectReqHeaderInfo" resultType="entity.SysReqMt">
+		select req_nm
+		from mysql.sys_req_mt
+		where useyn = 'Y'
+		
+	</select>
+	
+	<select id="selectHttpItem" parameterType="entity.SysReqMt" resultType="entity.SysReqMt">
+		select req_nm,
+			req_mth,
+			req_acc,
+			req_acen,
+			req_aclg,
+			req_cach,
+			req_con,
+			req_dnt,
+			req_ck,
+			req_host,
+			req_ref,
+			req_uir,
+			req_agent
+		from mysql.sys_req_mt
+		where req_nm = #{req_nm}
+	</select>
+	
+	
+</mapper>

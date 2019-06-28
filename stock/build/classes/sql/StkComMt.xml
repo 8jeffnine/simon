@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="stk_com_mt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from mysql.stk_com_mt
+	</select>
+	
+	<select id="selectComList" resultType="entity.StkComMt">
+		SELECT
+		co_nm, co_cd, st_dt, en_dt, use_yn, cat01, cat02, cat03, cat04, cat05,
+		rrsidno, rrt
+		FROM mysql.stk_com_mt
+		WHERE use_yn = 'Y'
+	</select>
+	
+	<select id="selectComListExist" resultType="entity.StkComMt">
+		SELECT
+		co_nm
+		FROM mysql.stk_com_mt
+		WHERE use_yn = 'Y'
+		and co_cd = #{co_cd}
+	</select>
+	
+	<insert id="inserttComlnfo" parameterType="entity.StkComMt">
+		insert into mysql.stk_com_mt
+		(co_nm, co_cd, st_dt, en_dt, use_yn, cat01, cat02, cat03, cat04, cat05,
+		rrsidno, rrt)
+		select
+		#{co_nm},#{co_cd},#{st_dt},IFNULL(#{en_dt},'99991231'),#{use_yn},#{cat01},#{cat02},#{cat03},#{cat04},#{cat05}
+		,IFNULL(#{rrsidno},'SYSTEM'),now()
+		from dual
+	</insert>
+	
+	<update id="updateComlnfo" parameterType="entity.StkComMt">
+		update mysql.stk_com_mt
+		set co_nm = #{co_nm}
+		, co_cd = #{co_cd}
+		, st_dt = #{st_dt}
+		, en_dt = #{en_dt}
+		, use_yn = #{use_yn}
+		, cat01 = #{cat01}
+		, cat02 = #{cat02}
+		, cat03 = #{cat03}
+		, cat04 = #{cat04}
+		, cat05 = #{cat05}
+		,modidno = IFNULL(#{rrsidno},'SYSTEM')
+		,modrrt = now()
+		where co_cd = #{co_cd} 
+		
+	</update>
+	
+	
+</mapper>

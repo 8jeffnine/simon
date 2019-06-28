@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="scrap.entity.Scrap">
+	<parameterMap type="scrap.entity.Scrap" id="scrapParam">
+		<parameter property="cnt" mode="IN"/>
+		<parameter property="itemNo" mode="IN"/>
+		<parameter property="itemName" mode="IN"/>
+		<parameter property="itemPrice" mode="IN"/>
+		<parameter property="itemAmout" mode="IN"/>
+		<parameter property="itemDisPrice" mode="IN"/>
+		
+		<parameter property="seq" mode="IN"/>		
+		<parameter property="ctgLv" mode="IN"/>		
+		<parameter property="ctgGb" mode="IN"/>		
+		<parameter property="ctgName" mode="IN"/>		
+		<parameter property="upCtgGb" mode="IN"/>		
+		<parameter property="rrt" mode="IN"/>
+		<parameter property="rrsId" mode="IN"/>				
+	</parameterMap>
+	
+	<select id="getCnt" resultType="scrap.entity.Scrap" parameterType="scrap.entity.Scrap">
+	<![CDATA[	
+		select count(*) cnt from stock_trd_ft
+	]]>
+	</select>
+	<parameterMap type="scrap.entity.Scrap" id="timeParam">
+		<parameter property="itemNo" mode="IN"/>
+	</parameterMap>
+	<select id="getTime" resultType="scrap.entity.Scrap" parameterType="scrap.entity.Scrap">
+		select sysdate() as itemNo from dual
+	</select>
+	
+	<select id="selectCtgList" resultType="scrap.entity.Scrap" parameterType="scrap.entity.Scrap">
+	<![CDATA[
+		select seq, ctglv, ctggb, ctgname, upctggb, rrt, rrsid
+		  from pj_ctg
+	]]>
+	</select>
+	
+	<select id="selectCtgListDetail" resultType="scrap.entity.Scrap" parameterType="scrap.entity.Scrap">
+	<![CDATA[
+		select seq, ctglv, ctggb, ctgname, upctggb, rrt, rrsid
+		  from pj_ctg
+		 where seq = #{seq}
+	]]>
+	</select>
+	
+	<select id="getUserInfo" resultType="scrap.entity.Scrap" parameterType="scrap.entity.Scrap">
+	<![CDATA[
+		select id, email
+		  from pj_user
+		 where id = #{id}
+		   and pw = #{pw}
+	]]>
+	</select>
+	
+	<insert id="insertCtg" parameterType="scrap.entity.Scrap">
+	<![CDATA[
+		insert into pj_ctg(seq, ctglv, ctggb, ctgname, upctggb, rrt, rrsid)
+		select nvl(max(seq)+1,1) seq, #{ctglv}, ' ',  #{ctgname}, nvl(#{upctggb},0), sysdate, nvl(#{rrsid},' ') from pj_ctg
+	]]> 
+	</insert>
+
+	<insert id="insertUserId" parameterType="scrap.entity.Scrap">
+	<![CDATA[
+		insert into pj_user
+		select nvl(max(seq)+1,1) seq, #{id}, #{pw}, #{email}, sysdate, 'SYSTEM' from pj_user
+	]]> 
+	</insert>
+	
+</mapper>
