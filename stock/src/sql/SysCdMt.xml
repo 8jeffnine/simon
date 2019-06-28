@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="sys_cd_mt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from mysql.sys_cd_mt
+	</select>
+	
+	<insert id="insertSysCd" parameterType="entity.SysCdMt">
+		insert into mysql.sys_cd_mt(group_cd, detail_cd, lang_key, cd_name, cd_desc, use_yn)
+		select #{group_cd}, #{detail_cd}, #{lang_key}, #{cd_name}, #{cd_desc}, #{use_yn}
+		from dual
+	</insert>
+	
+	<select id="selectSysCdList" resultType="entity.SysCdMt" parameterType="entity.SysCdMt">
+		select detail_cd, cd_name
+		from mysql.sys_cd_mt
+		where group_cd = #{group_cd}
+	<if test="lang_key != null">
+		and lang_key = #{lang_key}
+	</if>
+	<if test="lang_key == null">
+		and lang_key = 'ko'
+	</if>
+	</select>
+	
+	
+	<update id="updateScrapJobStatus" parameterType="entity.SysCdMt">
+		update mysql.sys_cd_mt
+		set s_stat = #{s_stat}
+		where scrap_id = #{scrap_id}
+	</update>	
+	
+</mapper>

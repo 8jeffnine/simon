@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="stk_prc_mt">
+	
+	
+	<select id="selectData" resultType="String">
+		select count(*) 
+		from mysql.skt_prc_mt
+	</select>
+	
+	<select id="selectPrcList" resultType="entity.StkPrcMt" parameterType="entity.StkPrcMt">
+		SELECT
+		co_cd, es_dt, es_time, es_envl, es_gap, es_stvl, es_hivl, es_lovl, es_trs
+		, rrsidno, rrt, modidno, modrrt
+		FROM mysql.stk_prc_mt
+		where co_cd = #{co_cd} 
+	</select>
+	
+	<insert id="insertPrcInfo" parameterType="entity.StkPrcMt">
+		insert into mysql.stk_prc_mt
+		(co_cd, es_dt, es_time, es_envl, es_stvl, es_hivl, es_lovl, es_trs
+		, rrsidno, rrt)
+		select
+		convert('${co_cd}',char),#{es_dt},#{es_time},#{es_envl},#{es_stvl},#{es_hivl},#{es_lovl},#{es_trs}
+		,IFNULL(#{rrsidno},'SYSTEM'),now()
+		from dual
+	</insert>
+	
+	<update id="updatePrcInfo" parameterType="entity.StkPrcMt">
+		update mysql.stk_prc_mt
+		set es_dt = #{es_dt}
+		, es_time = #{es_time}
+		, es_envl = #{es_envl}
+		, es_stvl = #{es_stvl}
+		, es_hivl = #{es_hivl}
+		, es_lovl = #{es_lovl}
+		, es_trs = #{es_trs}
+		, modidno = 'system'
+		, modrrt = now()
+		where co_cd = #{co_cd}
+	</update>
+	
+	<update id="updateDefaultJobList" statementType="CALLABLE" parameterType="entity.StkPrcMt">
+		{ CALL mysql.getStkJobToday() }
+	</update>
+	
+</mapper>

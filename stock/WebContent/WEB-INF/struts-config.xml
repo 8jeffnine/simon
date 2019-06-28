@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+"http://jakarta.apache.org/struts/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+	<form-beans>
+	</form-beans>
+	<global-exceptions />
+	<global-forwards />
+	<action-mappings type="org.apache.struts.action.ActionMapping">
+	
+		<action path="/test" type="ui.MainController">
+			<forward name="test" path="/success.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrap" type="ui.MainController">
+			<forward name="scrap" path="/jsp/scrap.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapAdmin" type="ui.MainController">
+			<forward name="scrapAdmin" path="/jsp/scrap_admin.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapReg" type="ui.MainController">
+			<forward name="scrapReg" path="/jsp/scrap_reg.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapRegSave" type="ui.MainController">
+			<forward name="success" redirect="true" path="/scrapAdmin.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapReqReg" forward="/jsp/scrap_req_reg.jsp" /> 
+		
+		<action path="/scrapReqSave" type="ui.MainController">
+			<forward name="success" redirect="true" path="/scrapAdmin.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapComList" type="ui.MainController">
+			<forward name="success" path="/jsp/scrap_com_list.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapComReg" type="ui.MainController">
+			<forward name="success" path="/jsp/scrap_com_reg.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapComRegProc" type="ui.MainController">
+			<forward name="success"  redirect="true" path="/scrapComList.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		
+		<action path="/scrapDefSet" type="ui.MainController">
+			<forward name="success" redirect="true" path="/scrapExe.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/scrapExe" type="ui.MainController">
+			<forward name="success" redirect="true" path="/insert.do" />
+			<forward name="continue" path="/scrapExe.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/insert" type="ui.MainController">
+			<forward name="success" redirect="true" path="/search.do" />
+			<forward name="failed" path="/error.jsp" /> 
+		</action>		
+		
+		<action path="/isrDate" type="ui.MainController">
+			<forward name="isrDate" path="/success.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>
+		
+		<action path="/NewsHis" type="ui.MainController">
+			<forward name="NewsHis" path="/success.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>		
+		
+		<action path="/search" type="ui.MainController">
+			<forward name="search" path="/jsp/search.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>	
+		
+		<action path="/chart" type="ui.MainController">
+			<forward name="chart" path="/jsp/chart.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>	
+		
+		<action path="/chartData" type="ui.MainController">
+			<forward name="chart" path="/jsp/chart.jsp" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>	
+		
+		<action path="/loginCheck" type="ui.MainController">
+			<forward name="loginCheck" path="/search.do" /> 
+			<forward name="failed" path="/error.jsp" /> 
+		</action>	
+		
+		<action path="/chartSave" type="ui.MainController" />
+		
+	</action-mappings>
+</struts-config>
+
