@@ -57,9 +57,9 @@ public class MainController extends Action {
 		
 		// Property : setting
 		Properties props = new Properties();
-		String propFile = "C:\\workspace\\stock\\WebContent\\WEB-INF\\config.properties";
+//		String propFile = "C:\\workspace\\stock\\stock\\WebContent\\WEB-INF\\config.properties";
 //		String propFile = "C:\\catch_mi\\config.properties";
-//		String propFile = "/usr/share/tomcat7/webapps/stock/config.properties";
+		String propFile = "/var/lib/tomcat7/webapps/stock/WEB-INF/config.properties";
 		
 		// Property : File read, load
 		FileInputStream fis = new FileInputStream(propFile);
@@ -304,12 +304,20 @@ public class MainController extends Action {
 			String usrEmail = request.getParameter("email");
 			String usrPw = request.getParameter("pwd");
 			
+			// email, password is required
+			if(usrEmail == null || usrPw == null) return mapping.findForward("failed");
+			
 			User inDto = new User();
-			inDto.setUsr_email(usrEmail);
-			inDto.setUsr_pw(usrPw);
+			if(usrEmail != null)inDto.setUsr_email(usrEmail);
+			if(usrPw != null)inDto.setUsr_pw(usrPw);
 			
 			List<User> userInfo = midao.selectData("user.selectUserInfo", inDto);
-			session.setAttribute("user", userInfo.get(0).getUsr_nm());
+			if(userInfo.size() > 0){
+				session.setAttribute("user", userInfo.get(0).getUsr_nm());
+			}else{
+				// 일치하는 정보가 없으면 failed 로 처리하여 search 로 다시이동
+				return mapping.findForward("failed");
+			}
 			
 		}else if(actionPath.equals("scrapDefSet")){
 			long b = System.currentTimeMillis();
@@ -545,20 +553,24 @@ logger.info(listOfFiles.length);
 			
 //			String keyword = request.getParameter("keyword") != null ? new String(request.getParameter("keyword").getBytes("ISO-8859-1"),"UTF-8") : null;
 //			String title = null != keyword ? new String(keyword.toLowerCase().getBytes("UTF-8"), "UTF-8") : null;
-			String keyword = request.getParameter("keyword") != null ? request.getParameter("keyword").trim().toLowerCase() : null;
+
+			// if keyword is null, then post process is not working.
+			if(request.getParameter("keyword") == null) return mapping.findForward("search");
+			
+			String keyword = request.getParameter("keyword").trim().toLowerCase();
 			
 			String title = null;
 			String title2 = null;
 			String title3 = null;
 			String[] key3word = new String[10];
 			
-			if(keyword != null) key3word = keyword.split(" ");
-//			logger.info(key3word[0]+"\t"+key3word[1]+"\t"+key3word[2]);
+			key3word = keyword.split(" ");
 			if(key3word.length > 0){
 				if(null != key3word[0] && !"".equals(key3word[0])) title = key3word[0];
 				if(key3word.length >= 2) if(null != key3word[1] && !"".equals(key3word[1])) title2 = key3word[1];
 				if(key3word.length >= 3) if(null != key3word[2] && !"".equals(key3word[2])) title3 = key3word[2];
 			}
+//			logger.info(key3word[0]+"\t"+key3word[1]+"\t"+key3word[2]);
 			
 			String page = request.getParameter("page") != null && !"".equals(request.getParameter("page")) ? request.getParameter("page") : "1";
 			int pagef = (Integer.parseInt(page) - 1) * 30;

@@ -130,6 +130,9 @@ if(setUrl.indexOf("naver") > -1){
 // String keyStore = "C:\\java\\jdk1.6.0\\jre\\lib\\security\\cacerts";
 //		 String keyStore = "C:\\Users\\today is present\\naver.cer";
 //		 String keyStore = "C:\\Users\\today is present\\kakao.cer";
+
+/** 공통영역으로 이동 필요 */
+/** ssl 키 관련으로 사이트, 사이트별 적용여부, 파일위치, id 로 데이터 관리 */
  String keyStore = "c:\\java\\jdk1.6.0\\jre\\lib\\security\\cacerts";
 //System.setProperty("javax.net.ssl.trustStore", keyStore );
  System.setProperty("javax.net.ssl.trustStorePassword", "changeit");

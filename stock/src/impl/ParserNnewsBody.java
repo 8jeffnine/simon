@@ -113,7 +113,7 @@ public class ParserNnewsBody {
 					dto.setTitle(title[g]);
 					dto.setPress(oid);
 					dto.setArtiURL(artiURL[g]);
-					dto.setDate(date);
+					dto.setPubDate(date);
 				
 //				List<News> cntList = midao.selectData("mkt.selectNewsExist", dto);
 //				if( cntList.get(0).getSeq() > 0){
