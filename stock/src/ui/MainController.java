@@ -57,9 +57,10 @@ public class MainController extends Action {
 		
 		// Property : setting
 		Properties props = new Properties();
-		String propFile = "C:\\workspace\\stock\\WebContent\\WEB-INF\\config.properties";
+//		String propFile = "C:\\workspace\\stock\\WebContent\\WEB-INF\\config.properties";
+//		String propFile = "/home/domingues/workspace/stock/stock/WebContent/WEB-INF/config.properties";
 //		String propFile = "C:\\catch_mi\\config.properties";
-//		String propFile = "/usr/share/tomcat7/webapps/stock/config.properties";
+		String propFile = "/var/lib/tomcat7/webapps/mi/WEB-INF/config.properties";
 		
 		// Property : File read, load
 		FileInputStream fis = new FileInputStream(propFile);
