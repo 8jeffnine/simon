@@ -101,7 +101,7 @@
 		
 		<action path="/loginCheck" type="ui.MainController">
 			<forward name="loginCheck" path="/search.do" /> 
-			<forward name="failed" path="/error.jsp" /> 
+			<forward name="failed" path="/login.jsp" /> 
 		</action>	
 		
 		<action path="/chartSave" type="ui.MainController" />
