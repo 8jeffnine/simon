@@ -33,7 +33,7 @@ function goNewsContent(p1){
 	}else{
 		window.open(p1,'_blank');
 	}
-		
+
 }
 function fn_scrap(p1){
 	window.open("./scrapExe.do?s_url="+p1,'_blank');	

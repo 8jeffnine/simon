@@ -54,7 +54,7 @@
  <table class="table table-hover">
    <thead>
    <tr>
-     <th width=10%>Date</th>
+     <th width=10%>Date</th> 
      <th width=*>Title</th>
      <th width=10%>Content</th>
      <th width=5%>Company</th>
