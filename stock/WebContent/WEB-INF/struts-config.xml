@@ -10,8 +10,8 @@
 	<global-forwards />
 	<action-mappings type="org.apache.struts.action.ActionMapping">
 	
-		<action path="/test" type="ui.MainController">
-			<forward name="test" path="/success.jsp" /> 
+		<action path="/conTest" type="ui.MainController">
+			<forward name="conTest" path="/timeCheck.jsp" /> 
 			<forward name="failed" path="/error.jsp" /> 
 		</action>
 		

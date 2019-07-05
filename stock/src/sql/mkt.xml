@@ -11,6 +11,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		select count(*) 
 		from world.city
 	</select>
+	
+	<select id="selectAlive" resultType="entity.Joblist">
+		select sysdate() as startdt from dual
+	</select>
 
 	<select id="selectPriceInfo" parameterType="entity.Item" resultType="entity.Item">
 		select brandname, itemname, disprice, stdprice

@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONObject;
 
 import entity.HttpItem;
+import entity.Item;
 import entity.Joblist;
 import entity.News;
 import entity.Search;
@@ -45,7 +46,7 @@ public class MainController extends Action {
 	private File file;
 	static Logger logger = Logger.getRootLogger();
 	static int k = 0;
-	
+	static String systemOs;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) 
 		throws Exception{
@@ -57,9 +58,8 @@ public class MainController extends Action {
 		
 		// Property : setting
 		Properties props = new Properties();
-//		String propFile = "C:\\workspace\\stock\\stock\\WebContent\\WEB-INF\\config.properties";
-//		String propFile = "C:\\catch_mi\\config.properties";
-		String propFile = "/var/lib/tomcat7/webapps/stock/WEB-INF/config.properties";
+		String propFile = "/var/lib/tomcat7/webapps/mi/WEB-INF/config.properties";
+
 		
 		// Property : File read, load
 		FileInputStream fis = new FileInputStream(propFile);
@@ -67,7 +67,7 @@ public class MainController extends Action {
 		
 		// Property : Read properties
 		final String file_Encoding = props.getProperty("file.encoding").trim();
-		final String systemOs = props.getProperty("system.os").trim();
+		String systemOs = props.getProperty("system.os").trim();
 		String file_path = props.getProperty("file."+systemOs+".path").trim();
 
 //		String scrap_url = props.getProperty("scrap.url01").trim();
@@ -84,10 +84,11 @@ public class MainController extends Action {
 		// DB accesss
 		MainServiceImplDAO midao = new MainServiceImplDAO();
 		
-		if(actionPath.equals("test")){
+		if(actionPath.equals("conTest")){
 			
-			String str = request.getParameter("");
-			midao.selectData("selectData", "");
+			List<Joblist> items = midao.selectData("mkt.selectAlive");
+			request.setAttribute("currTime", items.get(0).getStartdt());
+			
 
 		}else if(actionPath.equals("scrap")){
 			long b = System.currentTimeMillis();
@@ -336,10 +337,7 @@ public class MainController extends Action {
 		}else if(actionPath.equals("scrapExe")){
 			long b = System.currentTimeMillis();
 			
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			Date now = new Date();
-			String today = df.format(now);
-			today = today.substring(0, 8);
+			String today = getToday8digit();
 			
 			String sUrl = request.getParameter("s_url");
 			logger.info("sUrl : " + sUrl);
@@ -362,10 +360,10 @@ public class MainController extends Action {
 
 			// crawling => file save
 			String pre_fileName = compcd + "_" + today + "_";
-//			file_path = file_path+today+"\\";	// windows \\
-			file_path = file_path+today+"/";
+			String exePath = getFilePath(file_path);
+//			backupPath = getBackupFilePath(file_path);
 			
-			File dest = new File(file_path);
+			File dest = new File(exePath);
 			if(!dest.exists()) dest.mkdir();
 			
 			// crawling on web
@@ -381,7 +379,7 @@ public class MainController extends Action {
 				
 				logger.info("httpItems SIZE : " + httpItems.size());
 				Crawler craw = new Crawler();
-					craw.getHTMLFile(items.get(i).getS_url(), file_path, pre_fileName + i + ".html", httpItems);
+					craw.getHTMLFile(items.get(i).getS_url(), exePath, pre_fileName + i + ".html", httpItems);
 					Thread.sleep(320); // delay 0.3s
 					Joblist updDto = new Joblist();
 						updDto.setS_url(items.get(i).getS_url());
@@ -399,24 +397,9 @@ public class MainController extends Action {
 			
 			// 날짜를 지정해서 parsing 하는 경우 today 파라미터로 수신
 			String today = (String)request.getParameter("today");
-			String exePath = "";
-			String backupPath = "";
 			
-			// 날짜 미지정일 경우 시스템의 날짜인 폴더를 검색하여 수행
-			if(today == null || today.equals("")){
-				DateFormat df = new SimpleDateFormat("yyyyMMdd");
-				Date now = new Date();
-				today = df.format(now).substring(0, 8);
-			}
-			
-			// properties 파일의 설정에 따라 파일 기본경로를 설정한다
-			if("window".equals(systemOs)){
-				exePath = file_path+today+"\\";	//windows
-				backupPath = file_path + "b" + today + "\\";
-			}else{
-				exePath = file_path+today+"/";
-				backupPath = file_path + "b" + today + "/";
-			}
+			String exePath = getFilePath(file_path);
+			String backupPath = getBackupFilePath(file_path);
 			
 			// 설정된 폴더의 파일들을 찾음
 			File file = new File(exePath);
@@ -467,21 +450,15 @@ public class MainController extends Action {
 			String startdt = (String)request.getParameter("startdt");
 			String enddt = (String)request.getParameter("enddt");
 			
-			String today = (String)request.getParameter("today");
-			if(today == null || today.equals("")){
-				DateFormat df = new SimpleDateFormat("yyyyMMdd");
-				Date now = new Date();
-				today = df.format(now).substring(0, 8);
-			}
+			String today = getToday8digit();
 			if(startdt == null) startdt = today;
 			if(enddt == null) enddt = today;
 
-//			file_path = file_path+today+"\\";	windows
-			file_path = file_path+today+"/";
-logger.info(file_path);
-			File file = new File(file_path);
+			String exePath = getFilePath(file_path);
+//			String backupPath = getBackupFilePath(file_path);
+			
+			File file = new File(exePath);
 			File[] listOfFiles = file.listFiles();
-logger.info(listOfFiles.length);
 
 			for(int i=0; i<listOfFiles.length; i++){
 				if(listOfFiles[i].toString().indexOf(".html") > -1){
@@ -503,10 +480,7 @@ logger.info(listOfFiles.length);
 		}else if(actionPath.equals("NewsHis")){
 			long b = System.currentTimeMillis();
 			
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			Date now = new Date();
-			String today = df.format(now);
-			today = today.substring(0, 8);
+			String today = getToday8digit();
 			
 			// get Joblist
 			List<Joblist> items = midao.selectData("mkt.selectNewsJobList");
@@ -520,10 +494,11 @@ logger.info(listOfFiles.length);
 
 			// crawling => file save
 			String pre_fileName = compcd + "_" + today + "_";
-//			file_path = file_path+today+"\\";	windows
-			file_path = file_path+today+"/";	// linux
+
+			String exePath = getFilePath(file_path);
+//			String backupPath = getBackupFilePath(file_path);
 			
-			File dest = new File(file_path);
+			File dest = new File(exePath);
 			if(!dest.exists()) dest.mkdir();
 			
 			// crawling on web
@@ -538,7 +513,7 @@ logger.info(listOfFiles.length);
 				}
 				
 				Crawler craw = new Crawler();
-					craw.getHTMLFile(items.get(i).getS_url(), file_path, pre_fileName + i + ".html", httpItems);
+					craw.getHTMLFile(items.get(i).getS_url(), exePath, pre_fileName + i + ".html", httpItems);
 					Thread.sleep(1650); // delay 0.3s
 					Joblist updDto = new Joblist();
 						updDto.setS_url(items.get(i).getS_url());
@@ -738,6 +713,41 @@ logger.info(listOfFiles.length);
 			
 		}
 		return mapping.findForward(resultActionPath);
+	}
+	
+	public String getFilePath(String path){
+		String today = getToday8digit();
+		
+		// properties 파일의 설정에 따라 파일 기본경로를 설정한다
+		if("window".equals(systemOs)){
+			path = path+today+"\\";	//windows
+		}else{
+			path = path+today+"/";
+		}
+
+		return path;
+	}
+	
+	public String getBackupFilePath(String path){
+		String today = getToday8digit();
+		
+		// properties 파일의 설정에 따라 파일 기본경로를 설정한다
+		if("window".equals(systemOs)){
+			path = path + "b" + today + "\\";
+		}else{
+			path = path + "b" + today + "/";
+		}
+		
+		return path;
+	}
+	
+	public String getToday8digit(){
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		Date now = new Date();
+		String today = df.format(now);
+		today = today.substring(0, 8);
+		
+		return today;
 	}
 
 }

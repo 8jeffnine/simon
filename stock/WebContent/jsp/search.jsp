@@ -29,8 +29,8 @@
 <jsp:include page="menu.jsp" flush="false"/>
 
 <div class="row">
- <div class="col-md-4"></div>
- <div class="col-md-4">
+ <div class="col-sm-4"></div>
+ <div class="col-sm-4">
    <div class="input-group">
    	<c:if test="${keyword eq null }">
      <input type="text" class="form-control" placeholder="input search keyword" name="keyword">
@@ -45,7 +45,7 @@
      </div>
    </div>
  </div>
- <div class="col-md-4"></div>
+ <div class="col-sm-4"></div>
 </div>
 
 <div class="container">
@@ -54,12 +54,12 @@
  <table class="table table-hover">
    <thead>
    <tr>
-     <th>Date</th>
-     <th>Title</th>
-     <th>Content</th>
-     <th>Company</th>
-     <th>Tag</th>
-     <th>N/A</th>
+     <th width=10%>Date</th> 
+     <th width=*>Title</th>
+     <th width=10%>Content</th>
+     <th width=5%>Company</th>
+     <th width=10%>Tag</th>
+     <th width=5%>N/A</th>
    </tr>
    </thead>
    <tbody>

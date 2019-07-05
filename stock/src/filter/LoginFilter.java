@@ -22,7 +22,9 @@ public class LoginFilter implements Filter {
     /** refactoring -- DB로 관리 */
             "/mi/"
     };
- 
+    
+	private static final String[] freePass = { "/scrapExe", "/insert", "/scrapDefSet", "/conTest" };
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
@@ -41,10 +43,13 @@ public class LoginFilter implements Filter {
             return;
         }
         
+        
         // scrap 하는 경우 filter 통하지 않고 request를 수행함
-        if(path.startsWith("/scrapExe")||path.startsWith("/insert")||path.startsWith("/scrapDefSet")){
-        	chain.doFilter(request, response);
-        	return;
+        for(String str : freePass){
+        	 if(path.startsWith(str)){
+        		 chain.doFilter(request, response);
+             	return;
+        	 }
         }
 
         
