@@ -127,8 +127,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-2"></div>
-	<div class="col-sm-6"></div>
-	<div class="col-sm-2" align=right>
+	<div class="col-sm-8" align=right>
 		<button class="btn btn-warning">Cancel</button>
 		<button class="btn btn-primary" onClick="goURL2('scrapComRegProc','I');">Save</button>
 		<button class="btn btn-primary" onClick="goURL2('scrapComRegProc','U');">Modify</button>

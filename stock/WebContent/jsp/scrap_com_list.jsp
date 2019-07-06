@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Stock >> Search</title>
+ <title>Stock >> Scrap >> Code list</title>
  <meta charset="utf-8">
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  
@@ -36,33 +36,73 @@
 	</div>
 	<div class="col-sm-2"></div>
 </div>
+
 <div class="row">
-	<div class="col-sm-2"></div>
-	 <div class="col-sm-4">
-	</div>
-	 <div class="col-sm-1">
-	</div>
-	<div class="col-sm-2"></div>
-</div>
-<div class="row">
-	<div class="col-sm-2"></div>
-	 <div class="col-sm-4">
-	</div>
-	 <div class="col-sm-1">
-	</div>
-	<div class="col-sm-2"></div>
-</div>
-<div class="row">
-	<div class="col-sm-12">&nbsp;</div>
-</div>
-<div class="row">
-	<div class="col-sm-2"></div>
-	<div class="col-sm-6"></div>
-	<div class="col-sm-2" align=right>
+	<div class="col-sm-1"></div>
+	<div class="col-sm-10" align=right>
 		<button class="btn btn-warning">Cancel</button>
 		<button class="btn btn-primary" onClick="goURL('scrapComReg');">Add</button>
 	</div>
-	<div class="col-sm-2"></div>
+	<div class="col-sm-1"></div>
+</div>
+
+<div class="row">
+	<div class="col-sm-1"></div>
+	 <div class="col-sm-10">
+		 <table class="table table-striped">
+ 			<thead>
+ 				<tr>
+	 				<th width=10%>번호</th>
+	 				<th width=*>종목명</th>
+	 				<th width=10%>종목코드</th>
+	 				<th width=5%>시작일</th>
+	 				<th width=5%>종료일</th>
+	 				<th width=10%>분류1</th>
+	 				<th width=10%>분류2</th>
+	 				<th width=10%>분류3</th>
+	 			</tr>
+ 			</thead>
+ 			<tbody>
+ 			<c:if test="${fn:length(comList) > 0}">
+  				<c:forEach items="${comList}" var="comlist" varStatus="status">
+  					<tr>
+  						<td>${status.count }</td>
+  						<td>${comlist.co_nm }</td>
+  						<td>${comlist.co_cd }</td>
+  						<td>${comlist.st_dt }</td>
+  						<td>${comlist.en_dt }</td>
+  						<td>${comlist.cat01 }</td>
+  						<td>${comlist.cat02 }</td>
+  						<td>${comlist.cat03 }</td>
+  					</tr>
+  				</c:forEach>
+  				</c:if>
+			<c:if test="${fn:length(comList) eq 0}">
+			   <tr>
+			     <td colspan="6">There is empty.</td>
+			   </tr>
+			</c:if>
+ 			</tbody>
+ 		</table>
+	</div>
+	<div class="col-sm-1"></div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">&nbsp;</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-1"></div>
+	<div class="col-sm-10" align=right>
+		<button class="btn btn-warning">Cancel</button>
+		<button class="btn btn-primary" onClick="goURL('scrapComReg');">Add</button>
+	</div>
+	<div class="col-sm-1"></div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">&nbsp;</div>
 </div>
 
 </form>

@@ -1,10 +1,7 @@
 package impl;
 
-import impl.MainServiceImplDAO;
-
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,10 +13,10 @@ import entity.News;
 
 public class ParserNnewsBody {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new ParserNnewsBody().getHtmlData("C://catch_mi//20170405_1.html", "EUC-KR");
-	}
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//		new ParserNnewsBody().getHtmlData("C://catch_mi//20170405_1.html", "EUC-KR");
+//	}
 	public void getHtmlData(final String file_name, final String file_Encoding){
 		
 		String fileEncoding = file_Encoding;

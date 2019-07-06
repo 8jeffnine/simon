@@ -12,7 +12,9 @@ import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
-
+/**
+ * ssl 적용하여 데이터 가져오기 
+ */
 public class CrawlerHtml {
  public static void main(String[] args) {
 	 

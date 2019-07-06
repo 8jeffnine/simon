@@ -106,6 +106,8 @@
 		
 		<action path="/chartSave" type="ui.MainController" />
 		
+		<action path="/rcmStockToday" forward="/jsp/rcm_stock_today.jsp" />		
+		
 	</action-mappings>
 </struts-config>
 

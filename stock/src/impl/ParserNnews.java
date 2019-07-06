@@ -1,7 +1,5 @@
 package impl;
 
-import impl.MainServiceImplDAO;
-
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -16,10 +14,10 @@ import entity.News;
 /** Expired.. before 2019-05 **/
 public class ParserNnews {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-//		new ParserELM().getHtmlData("C://workspace/mi/src/02.SK_FASHION_MALL.html");
-	}
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+////		new ParserELM().getHtmlData("C://workspace/mi/src/02.SK_FASHION_MALL.html");
+//	}
 	public void getHtmlData(final String file_name){
 		String fileName = file_name;
 
