@@ -6,14 +6,14 @@
 <nav class="navbar navbar-inverse">
  <div class="container-fluid">
    <div class="navbar-header">
-     <a class="navbar-brand" href="#">[ Simon #99 ]</a>
+     <a class="navbar-brand" href="#">[ Pirates #1 ]</a>
    </div>
    <ul class="nav navbar-nav">
-     <li><a href="#">Home</a></li>
+     <!-- <li><a href="#">Home</a></li> -->
      <li><a href="/mi/scrapAdmin.do">Scrap</a></li>
      <li><a href="/mi/search.do">Search</a></li>
      <li><a href="/mi/chart.do">Chart</a></li>
-     <li><a href="#">Contact</a></li>
+     <!-- <li><a href="#">Contact</a></li> -->
    </ul>
  </div>
 </nav>

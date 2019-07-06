@@ -18,6 +18,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		rrsidno, rrt
 		FROM mysql.stk_com_mt
 		WHERE use_yn = 'Y'
+		order by 1
 	</select>
 	
 	<select id="selectComListExist" resultType="entity.StkComMt">
